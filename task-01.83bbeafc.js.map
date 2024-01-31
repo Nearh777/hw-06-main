@@ -1,0 +1,1 @@
+{"mappings":"AAAeA,SAASC,iBAAiB","sources":["src/js/task-01.js"],"sourcesContent":["const listEl = document.querySelectorAll('.item');\n\n"],"names":["document","querySelectorAll"],"version":3,"file":"task-01.83bbeafc.js.map"}
