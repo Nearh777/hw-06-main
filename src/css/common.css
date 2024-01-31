@@ -18,6 +18,10 @@ input {
   font: inherit;
 }
 
+li {
+  list-style: none;
+}
+
 button {
   padding: 8px 12px;
   cursor: pointer;
