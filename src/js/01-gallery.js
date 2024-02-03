@@ -2,44 +2,12 @@ import { galleryItems } from './gallery-items.js';
 
 // Change code below this line
 const galleryContainerEl = document.querySelector('.gallery');
-// const itemsMarkup = galleryItemsMarkup(galleryItems);
-// galleryContainerEl.addEventListener('click', onGalleryClick);
-
-// function onGalleryClick(e) {
-//   e.preventDefault();
-
-//   if (e.target.nodeName !== 'IMG');
-
-//   const instance = basicLightbox.create(`
-//   <img src="${e.target.dataset.source}" width="800" height="600">`);
-
-//   instance.show();
-// }
-
-// function galleryItemsMarkup(items) {
-//   return items
-//     .map(({ preview, original, description }) => {
-//       return `<div class="gallery__item">
-//     <a class="gallery__link" href="${original}>
-//     <img
-//     class="gallery__image"
-//     src="${preview}"
-//     data-source="${original}"
-//     alt="${description}"
-//     />
-//     </a>
-//     </div>`;
-//     })
-//     .join('');
-// }
-
-// galleryEl.insertAdjacentHTML('beforeend', itemsMarkup);
 
 galleryContainerEl.addEventListener('click', onGalleryClick);
 
 const galleryItemsMarkup = ({ preview, original, description }) => {
-  const itemImgEl = document.createElement('li');
-  itemImgEl.classList.add('gallery__item');
+  const itemEl = document.createElement('li');
+  itemEl.classList.add('gallery__item');
 
   const linkEl = document.createElement('a');
   linkEl.classList.add('gallery__link');
@@ -51,14 +19,34 @@ const galleryItemsMarkup = ({ preview, original, description }) => {
   imgEl.setAttribute('data-source', `${original}`);
   imgEl.setAttribute('alt', `${description}`);
 
-  itemImgEl.append(linkEl, imgEl);
+  itemEl.append(imgEl, linkEl);
+  console.log(itemEl);
 
-  return itemImgEl;
+  return itemEl;
 };
 
 const elementsImg = galleryItems.map(galleryItemsMarkup);
 
 galleryContainerEl.append(...elementsImg);
+
+// const galleryItemsImgMarkup = ({ preview, original, description }) => {
+//   return `
+//   <li class="gallery__item">
+//   <a class="gallery__link" href="${original}">
+//   <img
+//   class="gallery__image"
+//       src="${preview}"
+//       data-source="${original}"
+//       alt="${description}"
+//       />
+//       </a>
+//       </li>`;
+// };
+
+// const makeGalleryItemsImg = galleryItems.map(galleryItemsImgMarkup).join('');
+
+// galleryContainerEl.insertAdjacentHTML('beforeend', makeGalleryItemsImg);
+// console.log(makeGalleryItemsImg);
 
 const instance = basicLightbox.create(
   `
@@ -76,30 +64,13 @@ const instance = basicLightbox.create(
 function onGalleryClick(e) {
   e.preventDefault();
 
-  if (e.target.nodeName !== 'IMG') return;
-
-  const isItemImage = e.target.classList.contains('gallery__image');
-  if (!isItemImage) return;
-
-  const currentImgUrl = e.target.dataset.source;
-
-  const instance = basicLightbox.create(
-    `
-		<img src="${currentImgUrl}" width="1280" height="auto"/>
-        `,
-    {
-      onShow: instance => {
-        window.addEventListener('keydown', onEscKeyPress);
-      },
-      onClose: instance => {
-        window.removeEventListener('keydown', onEscKeyPress);
-      },
-    }
-  );
+  const datasetSource = e.target.dataset.source;
+  if (!datasetSource) return;
+  instance.element().querySelector('img').src = datasetSource;
   instance.show();
+}
 
-  function onEscKeyPress(e) {
-    if (e.code !== 'Escape') return;
-    instance.close();
-  }
+function onEscKeyPress(e) {
+  if (e.code !== 'Escape') return;
+  instance.close();
 }
